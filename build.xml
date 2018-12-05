@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project name="groovy-demo" basedir="." default="test">
+    <property file="conf.properties"/>
+    <property name="groovy_lib" value="/usr/local/groovy-2.5.4/lib/groovy-2.5.4.jar"/>
+    <property name="groovy_ant_lib" value="/usr/local/groovy-2.5.4/lib/groovy-ant-2.5.4.jar"/>
+    <property name="class_dir" value="bin"/>
+    <property name="src_dir" value="src/main/groovy"/>
+
+    <path id="classpath">
+        <pathelement location="${groovy_lib}"/>
+        <pathelement location="${groovy_ant_lib}"/>
+        <pathelement location="${class_dir}"/>
+    </path>
+
+    <taskdef name="groovyc" classname="org.codehaus.groovy.ant.Groovyc" classpathref="classpath"/>
+
+    <target name="compile">
+        <mkdir dir="${class_dir}"/>
+        <groovyc srcdir="${src_dir}" destdir="${class_dir}" classpathref="classpath" includes="${to_compile}" fork="true" includeAntRuntime="false">
+            <classpath refid="classpath"/>
+        </groovyc>
+    </target>
+
+    <target name="test" depends="compile">
+        <java classname="${to_launch}">
+            <classpath refid="classpath"/>
+        </java>
+    </target>
+</project>
